@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sri Lanka Trip — 7 Hari</title>
+<style>
+  :root {
+    --gold: #D4A017;
+    --green: #2D6A4F;
+    --dark: #1a1a2e;
+    --card-bg: #16213e;
+    --text: #e0e0e0;
+    --muted: #9a9aaa;
+    --accent: #f4a261;
+    --warn: #e76f51;
+    --radius: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(160deg, #0f3460 0%, #1a1a2e 50%, #16213e 100%);
+    padding: 60px 20px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 60% 40%, rgba(212,160,23,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(45,106,79,0.15) 0%, transparent 50%);
+  }
+  .hero-flag {
+    font-size: 56px;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 6vw, 3.8rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, var(--gold), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+  }
+  .hero-sub {
+    margin-top: 10px;
+    font-size: 1.1rem;
+    color: var(--muted);
+    position: relative;
+  }
+  .hero-dates {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(212,160,23,0.3);
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-size: 0.9rem;
+    color: var(--gold);
+    position: relative;
+  }
+  .route-strip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 28px;
+    position: relative;
+  }
+  .route-city {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #ccc;
+  }
+  .route-arrow { color: var(--gold); font-size: 0.8rem; }
+
+  /* CONTAINER */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 16px; }
+
+  /* SECTION TITLE */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin: 48px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(212,160,23,0.2);
+  }
+
+  /* TRANSPORT TABLE */
+  .transport-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .transport-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .transport-card .city { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+  .transport-card .strategy { font-size: 0.82rem; color: var(--muted); }
+  .badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .badge-green { background: rgba(45,106,79,0.3); color: #6fcf97; }
+  .badge-yellow { background: rgba(212,160,23,0.25); color: #f0c040; }
+  .badge-red { background: rgba(231,111,81,0.25); color: #e07060; }
+
+  .tips-box {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-left: 3px solid var(--green);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+  }
+  .tips-box strong { color: var(--accent); }
+
+  /* DAYS NAV */
+  .days-nav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 36px 0 24px;
+  }
+  .day-pill {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 50px;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: var(--muted);
+  }
+  .day-pill:hover, .day-pill.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #000;
+    font-weight: 700;
+  }
+
+  /* DAY CARD */
+  .day-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: linear-gradient(90deg, rgba(212,160,23,0.12) 0%, transparent 100%);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .day-number {
+    background: var(--gold);
+    color: #000;
+    font-weight: 900;
+    font-size: 0.75rem;
+    border-radius: 6px;
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+  .day-title { font-size: 1.1rem; font-weight: 700; }
+  .day-date { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+  .day-warning {
+    margin: 16px 24px 0;
+    background: rgba(231,111,81,0.12);
+    border: 1px solid rgba(231,111,81,0.3);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: #f0b090;
+  }
+  .day-warning strong { color: var(--warn); }
+
+  /* TIMELINE */
+  .timeline { padding: 20px 24px; }
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 0 16px;
+    position: relative;
+    padding-bottom: 20px;
+  }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 84px;
+    top: 8px;
+    bottom: 0;
+    width: 1px;
+    background: rgba(255,255,255,0.08);
+  }
+  .timeline-item:last-child::before { display: none; }
+  .time-label {
+    font-size: 0.78rem;
+    color: var(--gold);
+    font-weight: 700;
+    padding-top: 2px;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .time-dot {
+    position: absolute;
+    left: 79px;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--dark);
+  }
+  .time-content {
+    font-size: 0.9rem;
+    padding-top: 1px;
+    padding-left: 10px;
+  }
+  .time-content strong { color: #fff; }
+  .time-content .note {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+    font-size: 0.82rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin-top: 60px;
+  }
+
+  @media (max-width: 600px) {
+    .day-header { padding: 16px; }
+    .timeline { padding: 16px; }
+    .timeline-item { grid-template-columns: 58px 1fr; }
+    .timeline-item::before { left: 72px; }
+    .time-dot { left: 67px; }
+    .time-label { font-size: 0.72rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-flag">🇱🇰</div>
+  <h1>Sri Lanka Trip</h1>
+  <p class="hero-sub">Itinerary 7 Hari — Colombo · Kandy · Ella · Mirissa · Galle</p>
+  <div class="hero-dates">📅 7 Mei – 13 Mei 2026</div>
+  <div class="route-strip">
+    <span class="route-city">✈️ Colombo</span>
+    <span class="route-arrow">→</span>
+    <span class="route-city">🏛️ Kandy</span>
+    <span class="route-arrow">→</span>
+    <span class="route-city">🌿 Ella</span>
+    <span class="route-arrow">→</span>
+    <span class="route-city">🏖️ Mirissa</span>
+    <span class="route-arrow">→</span>
+    <span class="route-city">🏰 Galle</span>
+    <span class="route-arrow">→</span>
+    <span class="route-city">✈️ Pulang</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TRANSPORT -->
+  <div class="section-title">🚗 Panduan Transport</div>
+
+  <div class="transport-grid">
+    <div class="transport-card">
+      <div class="city">Colombo</div>
+      <span class="badge badge-green">✅ PickMe + Uber</span>
+      <div class="strategy">Coverage excellent, pakai apps</div>
+    </div>
+    <div class="transport-card">
+      <div class="city">Kandy</div>
+      <span class="badge badge-green">✅ PickMe utama</span>
+      <div class="strategy">Uber limited, PickMe lebih reliable</div>
+    </div>
+    <div class="transport-card">
+      <div class="city">Galle / Mirissa</div>
+      <span class="badge badge-green">✅ PickMe (2026)</span>
+      <div class="strategy">Sudah expand ke south coast</div>
+    </div>
+    <div class="transport-card">
+      <div class="city">Ella</div>
+      <span class="badge badge-red">❌ Gak ada apps</span>
+      <div class="strategy">Pakai tuk-tuk lokal di sini</div>
+    </div>
+  </div>
+
+  <div class="tips-box">
+    <strong>Antar kota:</strong> Colombo→Kandy: private driver ~$50-70 &nbsp;|&nbsp;
+    <strong>Kandy→Ella: WAJIB KERETA 🚂</strong> (one of world's best train rides!) &nbsp;|&nbsp;
+    Ella→Mirissa: private driver ~$70-90 &nbsp;|&nbsp; Galle→Colombo: coastal train ~$2
+  </div>
+  <div class="tips-box" style="border-left-color: var(--gold)">
+    <strong>⚠️ Download sekarang:</strong> <strong>PickMe</strong> (lebih penting dari Uber, 70% market share) + Uber sebagai backup. Download di Indonesia sebelum berangkat.
+  </div>
+
+  <!-- DAYS NAV -->
+  <div class="days-nav">
+    <a href="#day1" class="day-pill">Day 1</a>
+    <a href="#day2" class="day-pill">Day 2</a>
+    <a href="#day3" class="day-pill">Day 3</a>
+    <a href="#day4" class="day-pill">Day 4</a>
+    <a href="#day5" class="day-pill">Day 5</a>
+    <a href="#day6" class="day-pill">Day 6</a>
+    <a href="#day7" class="day-pill">Day 7</a>
+  </div>
+
+  <!-- DAY 1 -->
+  <div class="day-card" id="day1">
+    <div class="day-header">
+      <div>
+        <div class="day-number">DAY 1</div>
+      </div>
+      <div>
+        <div class="day-title">✈️ Arrival — Colombo</div>
+        <div class="day-date">Kamis, 7 Mei 2026</div>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">17:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>✈️ Mendarat di Bandaranaike Airport (CMB)</strong>
+          <div class="note">Negombo — free visa untuk Indonesia</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">17:30–18:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Imigrasi + Arrivals</strong>
+          <div class="note">Tunjukkan return ticket + voucher hotel → ambil bagasi → beli SIM card (Dialog/Mobitel ~Rs 1,500/$5 untuk 30 hari) → tarik LKR di ATM (target Rs 30,000–50,000)</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">18:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Order PickMe ke hotel Supun Arcade</strong>
+          <div class="note">~45-60 menit, Rs 4,500–5,500 | 56 Galle Road, Colombo</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">19:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Check-in hotel</strong></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">20:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Dinner</strong>
+          <div class="note">🦀 Ministry of Crab (Old Dutch Hospital, 10 min jalan) — chili crab ikonik<br>Atau: Upali's by Nawaloka untuk Sri Lankan rice & curry</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">22:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Balik hotel</strong> <span style="color:var(--muted)">— recovery jet lag</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="day-card" id="day2">
+    <div class="day-header">
+      <div><div class="day-number">DAY 2</div></div>
+      <div>
+        <div class="day-title">🏙️ Colombo Full Day</div>
+        <div class="day-date">Jumat, 8 Mei 2026</div>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">07:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Breakfast</strong><div class="note">Cari egg hoppers di warung lokal sekitar Galle Road</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">09:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Gangaramaya Temple</strong>
+          <div class="note">Rs 400 / ~$1.30 — kuil Buddhist eclectic, banyak artefak unik</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">10:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Seema Malaka</strong>
+          <div class="note">Kuil di tengah Beira Lake — 5 menit jalan dari Gangaramaya</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">11:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Pettah Market</strong>
+          <div class="note">Pasar tradisional seru. Wajib foto: Red Mosque (Jami Ul-Alfar)</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">13:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Lunch</strong>
+          <div class="note">Upali's by Nawaloka (rice & curry buffet ~Rs 2,500) atau Nana's (kottu roti)</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">14:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Independence Square</strong><div class="note">Chill walk + Independence Memorial Hall</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">15:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Arcade Independence Square</strong> atau <strong>National Museum</strong>
+          <div class="note">National Museum: Rs 1,000 / $3.30</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">17:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>🌅 Galle Face Green</strong>
+          <div class="note">Sunset di pantai kota — beli isso vadai (udang fritters) dari vendor pantai</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">19:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Dinner</strong>
+          <div class="note">Nuga Gama (Cinnamon Grand, village experience) atau Colombo Fort Café</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">21:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Drinks</strong>
+          <div class="note">Cloud Cafe (rooftop Marino Mall) atau Kama Colombo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="day-card" id="day3">
+    <div class="day-header">
+      <div><div class="day-number">DAY 3</div></div>
+      <div>
+        <div class="day-title">🚗 Colombo → Kandy</div>
+        <div class="day-date">Sabtu, 9 Mei 2026</div>
+      </div>
+    </div>
+    <div class="day-warning">
+      ⚠️ <strong>Hotel checkout jam 12:00</strong> di Supun Arcade Residency
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">07:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Breakfast hotel + packing</strong></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">09:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Old Dutch Hospital Shopping Precinct</strong>
+          <div class="note">Jalan kaki dari hotel — coffee + souvenir di Barefoot atau Odel</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">11:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Balik hotel, finish packing</strong></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">11:45</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Checkout</strong><div class="note">Simpan bagasi di lobby sambil tunggu driver</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">12:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>🚙 Private driver ke Kandy</strong>
+          <div class="note">$50-70, ~3.5-4 jam. Book via hotel atau PickMe Premium / KKday</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">13:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Pinnawala Elephant Orphanage</strong>
+          <div class="note">Feeding time 13:15 & bathing 14:00 — Rs 3,000 / $10. Cek dulu animal welfare info sebelum memutuskan</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">16:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Check-in Kandy</strong>
+          <div class="note">Theva Residency (hill view ~$80) atau Cinnamon Citadel (riverside ~$100)</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">17:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Kandy Lake walk</strong><div class="note">Santai keliling danau ~1 jam</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">18:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>🦷 Temple of the Tooth (Sri Dalada Maligawa)</strong>
+          <div class="note">Evening puja jam 18:30 — ceremony dengan drum & musik. Rs 2,000 / $6.50. Dress code: lutut & bahu tertutup</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">20:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Dinner</strong>
+          <div class="note">Empire Cafe (cozy fusion) atau Slightly Chilled Lounge Bar (city view)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 4 -->
+  <div class="day-card" id="day4">
+    <div class="day-header">
+      <div><div class="day-number">DAY 4</div></div>
+      <div>
+        <div class="day-title">🚂 Kandy → Ella (KERETA EPIC!)</div>
+        <div class="day-date">Minggu, 10 Mei 2026</div>
+      </div>
+    </div>
+    <div class="day-warning">
+      ⚠️ <strong>Tiket WAJIB booking jauh hari</strong> — sold out cepat! Pakai 12go.asia atau Visit Sri Lanka Tours. Kereta jam 08:47, duduk sisi kanan untuk best view. Harga $5-15.
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">06:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Breakfast hotel</strong><div class="note">Atau bungkus hopper buat di kereta</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">07:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Ke Kandy Railway Station</strong><div class="note">PickMe / hotel transfer ~15 menit</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">08:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Tiba stasiun</strong><div class="note">Cek platform, settle in</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">08:47</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>🚂 Kereta berangkat ke Ella!</strong>
+          <div class="note">Duduk sisi KANAN untuk best view kebun teh. Vendor lokal naik turun jual vada & tea</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">09:00–13:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Hill Country — pemandangan epik</strong>
+          <div class="note">Kebun teh, terowongan, jembatan. Stops: Hatton, Nanu Oya (Nuwara Eliya), Haputale</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">13:00–15:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>📸 Demodara Loop + Nine Arches Bridge area</strong>
+          <div class="note">Siap-siap kamera!</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">15:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>🚂 Tiba Ella Station</strong></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">16:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Check-in Ella</strong>
+          <div class="note">98 Acres Resort ($150, view kebun teh) · Zion View Ella ($90) · Ella Flower Garden ($70)</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">19:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Dinner</strong>
+          <div class="note">Cafe Chill (downtown, vibe banget) · Matey Hut (lokal murah) · AK Ristoro (rooftop)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 5 -->
+  <div class="day-card" id="day5">
+    <div class="day-header">
+      <div><div class="day-number">DAY 5</div></div>
+      <div>
+        <div class="day-title">🌿 Ella Full Day</div>
+        <div class="day-date">Senin, 11 Mei 2026</div>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">04:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>⏰ Bangun pagi</strong><div class="note">Untuk sunrise hike Little Adam's Peak — worth it banget!</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">05:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Tuk-tuk ke trailhead</strong><div class="note">~10 menit, Rs 500</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">05:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Mulai naik Little Adam's Peak</strong><div class="note">40-45 menit, easy hike, ada tangga</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">06:15</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>🌅 Sunrise di puncak!</strong>
+          <div class="note">View 360° lembah Ella — salah satu sunrise terbaik di Sri Lanka</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">07:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Sarapan</strong>
+          <div class="note">Cafe Chill atau Cafe One Love — egg hopper + Ceylon tea</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">09:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Nine Arches Bridge</strong>
+          <div class="note">Tuk-tuk ~Rs 800. Cek jadwal kereta lewat (09:30 atau 11:00 paling Instagrammable)</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">11:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Ravana Falls</strong>
+          <div class="note">~15 menit dari Nine Arches — bisa berenang di kolam bawah (hati-hati arus)</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">13:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Lunch</strong>
+          <div class="note">Dream Cafe atau Cafe Chill — kottu roti + arrack cocktail kalau mau adventurous</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">14:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Halpewatte Tea Factory tour</strong>
+          <div class="note">$5, ~1 jam — lihat proses Ceylon tea + tasting</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">16:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Optional: Ella Rock hike</strong>
+          <div class="note">4 jam round trip, harder — atau skip & chill di hotel pool</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">18:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Sunset</strong><div class="note">Di hotel atau AK Ristoro rooftop</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">20:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Dinner</strong>
+          <div class="note">Adam's Breeze (Sri Lankan tapas) atau Curd Shop (homestyle)</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">22:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Drinks</strong><div class="note">Café Chill — kadang ada live music</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 6 -->
+  <div class="day-card" id="day6">
+    <div class="day-header">
+      <div><div class="day-number">DAY 6</div></div>
+      <div>
+        <div class="day-title">🏖️ Ella → Mirissa</div>
+        <div class="day-date">Selasa, 12 Mei 2026</div>
+      </div>
+    </div>
+    <div class="day-warning">
+      ⚠️ Drive 4-5 jam. Book private driver dari hotel atau platform online ($70-90). &nbsp;|&nbsp; ⚠️ Mei = start Yala Monsoon south coast. Bawa rain jacket / payung lipat.
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">08:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Breakfast hotel + checkout</strong></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">09:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>🚙 Drive Ella → Mirissa</strong>
+          <div class="note">Via Ella Gap road — winding, scenic banget</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">10:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Diyaluma Falls</strong>
+          <div class="note">Sri Lanka 2nd highest waterfall — bisa hike ke upper pools ~1 jam</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">13:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Optional: Udawalawe National Park</strong>
+          <div class="note">Safari sore Rs 6,000-8,000 / $20-26 untuk 3 jam — gajah liar dijamin!</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">16:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Check-in Mirissa</strong>
+          <div class="note">Mirissa Beach Inn ($60) · Paradise Beach Club ($90) · Cape Weligama ($150 splurge)</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">17:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>🌅 Mirissa Beach — sunset!</strong></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">18:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Coconut Tree Hill</strong>
+          <div class="note">10 menit jalan — sunset shot ikonik Sri Lanka</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">20:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Dinner</strong>
+          <div class="note">Zephyr (beachfront seafood) atau No 1 Dewmini Roti Shop (legendary local)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 7 -->
+  <div class="day-card" id="day7">
+    <div class="day-header">
+      <div><div class="day-number">DAY 7</div></div>
+      <div>
+        <div class="day-title">🏰 Mirissa → Galle → Airport</div>
+        <div class="day-date">Rabu, 13 Mei 2026</div>
+      </div>
+    </div>
+    <div class="day-warning">
+      ⚠️ Plan ini assume flight pulang malam (~22:00+). Sesuaikan kalau flight lebih awal.
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">07:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Breakfast hotel</strong></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">08:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Optional: Whale watching tour 🐋</strong>
+          <div class="note">Mei masih bagus untuk blue whales! 3-4 jam, $40-60. Skip kalau gampang mabuk laut.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">11:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Checkout → Drive ke Galle</strong>
+          <div class="note">~45 menit, PickMe $25 atau private driver</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">12:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Lunch di Galle Fort</strong>
+          <div class="note">A Minute by Tuk Tuk atau Pedlar's Inn Café</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">13:30</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>🏰 Galle Fort walk (UNESCO)</strong>
+          <div class="note">Wajib: Galle Lighthouse (1848) · Flag Rock · Dutch Reformed Church · Fort Walls walk ~1.5 jam · Maritime Museum</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">16:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>Souvenir shopping</strong>
+          <div class="note">Stick No Bills (vintage poster) · Barefoot (textile)</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">17:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Coffee & cake</strong><div class="note">Pedlar's Inn atau Poonie's Kitchen</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">17:50</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>🚂 Coastal train Galle → Colombo Fort</strong>
+          <div class="note">~Rs 480 / $1.60, 2 jam, scenic pinggir laut! Atau PickMe langsung ke airport ($60-80)</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">19:50</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>Tiba Colombo Fort Station</strong></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">20:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content">
+          <strong>PickMe ke CMB Airport</strong>
+          <div class="note">~1 jam, Rs 4,500 / $15</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">21:00</div>
+        <div class="time-dot"></div>
+        <div class="time-content"><strong>✈️ Tiba airport — safe flight!</strong></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Sri Lanka Trip 2026 &nbsp;·&nbsp; 7–13 Mei &nbsp;·&nbsp; Have an amazing trip! 🇱🇰
+</footer>
+
+</body>
+</html>
